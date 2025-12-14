@@ -113,12 +113,6 @@ class NetflixTitle(models.Model):
         ordering = ['-date_added', '-release_year']
         verbose_name = "Netflix Title"
         verbose_name_plural = "Netflix Titles"
-        indexes = [
-            models.Index(fields=['type']),
-            models.Index(fields=['release_year']),
-            models.Index(fields=['date_added']),
-            models.Index(fields=['rating']),
-        ]
     
     def __str__(self):
         """String representation of the model"""
