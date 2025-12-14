@@ -1,0 +1,168 @@
+{% extends "api/base.html" %}
+
+{% block title %}Home - Netflix API{% endblock %}
+
+{% block content %}
+<div class="intro">
+    <h2>Welcome to the Netflix Titles REST API</h2>
+    <p>This API provides comprehensive access to a dataset of <strong>8,807 Netflix titles</strong> including movies and TV shows. Explore the endpoints below to query, analyze, and retrieve Netflix content data.</p>
+    
+    <h3 style="margin-top: 20px; color: #667eea;">Features:</h3>
+    <ul>
+        <li>📊 <strong>6 REST API Endpoints</strong> with various query capabilities</li>
+        <li>🔍 <strong>Advanced Search</strong> with multiple filters and Q objects</li>
+        <li>📈 <strong>Statistical Analytics</strong> with aggregations</li>
+        <li>🎯 <strong>Personalized Recommendations</strong> based on preferences</li>
+        <li>🌍 <strong>Country-Specific</strong> content browsing</li>
+        <li>✅ <strong>Full CRUD Operations</strong> (Create, Read, Update, Delete)</li>
+    </ul>
+</div>
+
+<div class="stats-grid">
+    <div class="stat-box">
+        <h3>8,807</h3>
+        <p>Total Titles</p>
+    </div>
+    <div class="stat-box">
+        <h3>6</h3>
+        <p>API Endpoints</p>
+    </div>
+    <div class="stat-box">
+        <h3>14</h3>
+        <p>Data Fields</p>
+    </div>
+    <div class="stat-box">
+        <h3>100%</h3>
+        <p>REST Compliant</p>
+    </div>
+</div>
+
+<h2 class="section-title">API Endpoints</h2>
+
+<!-- Endpoint 1: List Titles -->
+<div class="endpoint-card">
+    <h3>1. List Titles</h3>
+    <div>
+        <span class="method get">GET</span>
+        <code class="url">/api/titles/</code>
+    </div>
+    <p><strong>Description:</strong> Retrieve a list of all Netflix titles with optional filtering by type, rating, or release year.</p>
+    <p><strong>Query Parameters:</strong> <code>type</code>, <code>rating</code>, <code>year</code></p>
+    <p><strong>Example:</strong> <code>/api/titles/?type=Movie&year=2020</code></p>
+    <a href="/api/titles/" target="_blank">Try it →</a>
+    <a href="/api/titles/?type=Movie" target="_blank">Filter: Movies</a>
+    <a href="/api/titles/?rating=TV-MA" target="_blank">Filter: TV-MA</a>
+</div>
+
+<!-- Endpoint 2: Create Title -->
+<div class="endpoint-card">
+    <h3>2. Create New Title</h3>
+    <div>
+        <span class="method post">POST</span>
+        <code class="url">/api/titles/create/</code>
+    </div>
+    <p><strong>Description:</strong> Create a new Netflix title entry. Requires JSON body with title details.</p>
+    <p><strong>Required Fields:</strong> <code>show_id</code>, <code>type</code>, <code>title</code>, <code>release_year</code>, <code>duration</code>, <code>listed_in</code>, <code>description</code></p>
+    <p><strong>Response:</strong> 201 Created with new title data, or 400 Bad Request with validation errors</p>
+    <a href="/api/titles/create/" target="_blank">Try it →</a>
+</div>
+
+<!-- Endpoint 3: Statistics -->
+<div class="endpoint-card">
+    <h3>3. Statistics & Analytics</h3>
+    <div>
+        <span class="method get">GET</span>
+        <code class="url">/api/statistics/</code>
+    </div>
+    <p><strong>Description:</strong> Get comprehensive statistical analytics including type distribution, rating breakdown, content by year, top countries, and decade analysis.</p>
+    <p><strong>Features:</strong> Multiple aggregations using Count, Avg, Min, Max functions</p>
+    <p><strong>Returns:</strong> JSON object with detailed statistics and breakdowns</p>
+    <a href="/api/statistics/" target="_blank">View Statistics →</a>
+</div>
+
+<!-- Endpoint 4: Advanced Search -->
+<div class="endpoint-card">
+    <h3>4. Advanced Search (Most Complex)</h3>
+    <div>
+        <span class="method get">GET</span>
+        <code class="url">/api/titles/search/</code>
+    </div>
+    <p><strong>Description:</strong> Advanced multi-filter search using Django Q objects. Supports 9 different filter combinations.</p>
+    <p><strong>Query Parameters:</strong> <code>type</code>, <code>rating</code>, <code>country</code>, <code>year_min</code>, <code>year_max</code>, <code>genre</code>, <code>director</code>, <code>cast</code>, <code>title</code></p>
+    <p><strong>Example:</strong> <code>/api/titles/search/?genre=Drama&year_min=2015&country=United%20States</code></p>
+    <a href="/api/titles/search/" target="_blank">Try Search →</a>
+    <a href="/api/titles/search/?genre=Drama" target="_blank">Search: Drama</a>
+    <a href="/api/titles/search/?director=Nolan" target="_blank">Search: Nolan</a>
+</div>
+
+<!-- Endpoint 5: Country-Specific -->
+<div class="endpoint-card">
+    <h3>5. Country-Specific Content</h3>
+    <div>
+        <span class="method get">GET</span>
+        <code class="url">/api/country/&lt;country_name&gt;/</code>
+    </div>
+    <p><strong>Description:</strong> Get all titles from a specific country with statistics (total count, type breakdown, year range).</p>
+    <p><strong>URL Parameter:</strong> <code>country_name</code> - Name of the country</p>
+    <p><strong>Example:</strong> <code>/api/country/United%20States/</code></p>
+    <a href="/api/country/United States/" target="_blank">USA Content →</a>
+    <a href="/api/country/India/" target="_blank">India Content →</a>
+    <a href="/api/country/United Kingdom/" target="_blank">UK Content →</a>
+</div>
+
+<!-- Endpoint 6: Recommendations -->
+<div class="endpoint-card">
+    <h3>6. Personalized Recommendations</h3>
+    <div>
+        <span class="method get">GET</span>
+        <code class="url">/api/recommendations/</code>
+    </div>
+    <p><strong>Description:</strong> Get personalized content recommendations based on genre preference. Returns up to 20 titles.</p>
+    <p><strong>Query Parameters:</strong> <code>genre</code> (required), <code>type</code>, <code>recent</code></p>
+    <p><strong>Example:</strong> <code>/api/recommendations/?genre=Action&recent=true</code></p>
+    <a href="/api/recommendations/?genre=Action" target="_blank">Action Films →</a>
+    <a href="/api/recommendations/?genre=Drama" target="_blank">Drama →</a>
+    <a href="/api/recommendations/?genre=Comedy&type=Movie" target="_blank">Comedy Movies →</a>
+</div>
+
+<div class="intro" style="margin-top: 40px; background: #fff3cd; border-left-color: #ffc107;">
+    <h2 style="color: #856404;">📚 Documentation & Resources</h2>
+    <ul>
+        <li><strong>Django Admin Panel:</strong> <a href="/admin/" target="_blank">Manage data via admin interface</a></li>
+        <li><strong>Browsable API:</strong> All endpoints support Django REST Framework's browsable interface</li>
+        <li><strong>Data Format:</strong> All responses are in JSON format</li>
+        <li><strong>Authentication:</strong> Currently open (no authentication required for development)</li>
+        <li><strong>CORS:</strong> Configured for local development</li>
+    </ul>
+    
+    <h3 style="margin-top: 20px; color: #856404;">Quick Start with cURL:</h3>
+    <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; overflow-x: auto; margin-top: 10px;">
+# Get all titles
+curl http://127.0.0.1:8000/api/titles/
+
+# Get movies only
+curl "http://127.0.0.1:8000/api/titles/?type=Movie"
+
+# Get statistics
+curl http://127.0.0.1:8000/api/statistics/
+
+# Search for Drama from 2020
+curl "http://127.0.0.1:8000/api/titles/search/?genre=Drama&year_min=2020"
+
+# Get recommendations
+curl "http://127.0.0.1:8000/api/recommendations/?genre=Action"
+    </pre>
+</div>
+
+<div class="intro" style="margin-top: 20px; background: #d1ecf1; border-left-color: #17a2b8;">
+    <h2 style="color: #0c5460;">🎯 Project Information</h2>
+    <ul>
+        <li><strong>Course:</strong> CM3035 - Advanced Web Development</li>
+        <li><strong>Framework:</strong> Django 6.0 with Django REST Framework 3.16.1</li>
+        <li><strong>Database:</strong> SQLite3</li>
+        <li><strong>Dataset:</strong> Netflix Shows (8,807 titles from Kaggle)</li>
+        <li><strong>ORM Features:</strong> Q objects, aggregations, annotations, complex queries</li>
+        <li><strong>Total Endpoints:</strong> 6 (5 GET + 1 POST)</li>
+    </ul>
+</div>
+{% endblock %}
