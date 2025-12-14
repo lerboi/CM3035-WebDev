@@ -1,168 +1,234 @@
-{% extends "api/base.html" %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Netflix API{% endblock %}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-{% block title %}Home - Netflix API{% endblock %}
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
 
-{% block content %}
-<div class="intro">
-    <h2>Welcome to the Netflix Titles REST API</h2>
-    <p>This API provides comprehensive access to a dataset of <strong>8,807 Netflix titles</strong> including movies and TV shows. Explore the endpoints below to query, analyze, and retrieve Netflix content data.</p>
-    
-    <h3 style="margin-top: 20px; color: #667eea;">Features:</h3>
-    <ul>
-        <li>📊 <strong>6 REST API Endpoints</strong> with various query capabilities</li>
-        <li>🔍 <strong>Advanced Search</strong> with multiple filters and Q objects</li>
-        <li>📈 <strong>Statistical Analytics</strong> with aggregations</li>
-        <li>🎯 <strong>Personalized Recommendations</strong> based on preferences</li>
-        <li>🌍 <strong>Country-Specific</strong> content browsing</li>
-        <li>✅ <strong>Full CRUD Operations</strong> (Create, Read, Update, Delete)</li>
-    </ul>
-</div>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 10px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+            overflow: hidden;
+        }
 
-<div class="stats-grid">
-    <div class="stat-box">
-        <h3>8,807</h3>
-        <p>Total Titles</p>
+        header {
+            background: linear-gradient(135deg, #E50914 0%, #B20710 100%);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+
+        header h1 {
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            font-weight: 700;
+        }
+
+        header p {
+            font-size: 1.1em;
+            opacity: 0.9;
+        }
+
+        .content {
+            padding: 40px;
+        }
+
+        footer {
+            background: #f5f5f5;
+            padding: 20px;
+            text-align: center;
+            color: #666;
+            border-top: 1px solid #ddd;
+        }
+
+        footer p {
+            margin: 5px 0;
+        }
+
+        footer a {
+            color: #E50914;
+            text-decoration: none;
+        }
+
+        footer a:hover {
+            text-decoration: underline;
+        }
+
+        .endpoint-card {
+            background: #f9f9f9;
+            border-left: 4px solid #E50914;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+
+        .endpoint-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .endpoint-card h3 {
+            color: #E50914;
+            margin-bottom: 10px;
+            font-size: 1.4em;
+        }
+
+        .endpoint-card .method {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: bold;
+            margin-right: 10px;
+        }
+
+        .method.get {
+            background: #61affe;
+            color: white;
+        }
+
+        .method.post {
+            background: #49cc90;
+            color: white;
+        }
+
+        .endpoint-card .url {
+            font-family: 'Courier New', monospace;
+            background: #e8e8e8;
+            padding: 8px 12px;
+            border-radius: 4px;
+            display: inline-block;
+            margin: 10px 0;
+            font-size: 0.95em;
+        }
+
+        .endpoint-card p {
+            color: #666;
+            margin-top: 10px;
+        }
+
+        .endpoint-card a {
+            display: inline-block;
+            margin-top: 10px;
+            padding: 8px 16px;
+            background: #E50914;
+            color: white;
+            text-decoration: none;
+            border-radius: 4px;
+            font-size: 0.9em;
+            transition: background 0.2s;
+        }
+
+        .endpoint-card a:hover {
+            background: #B20710;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            margin: 30px 0;
+        }
+
+        .stat-box {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            text-align: center;
+        }
+
+        .stat-box h3 {
+            font-size: 2.5em;
+            margin-bottom: 5px;
+        }
+
+        .stat-box p {
+            opacity: 0.9;
+            font-size: 0.95em;
+        }
+
+        .section-title {
+            font-size: 2em;
+            margin-bottom: 20px;
+            color: #333;
+            border-bottom: 3px solid #E50914;
+            padding-bottom: 10px;
+        }
+
+        .intro {
+            background: #f0f7ff;
+            padding: 25px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            border-left: 4px solid #667eea;
+        }
+
+        .intro h2 {
+            color: #667eea;
+            margin-bottom: 15px;
+        }
+
+        .intro ul {
+            margin-left: 20px;
+            margin-top: 10px;
+        }
+
+        .intro li {
+            margin: 8px 0;
+        }
+
+        @media (max-width: 768px) {
+            header h1 {
+                font-size: 1.8em;
+            }
+
+            .content {
+                padding: 20px;
+            }
+
+            .stats-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>🎬 Netflix Titles REST API</h1>
+            <p>Advanced Web Development Coursework - CM3035</p>
+        </header>
+
+        <div class="content">
+            {% block content %}{% endblock %}
+        </div>
+
+        <footer>
+            <p><strong>Netflix Titles API</strong> | Built with Django 6.0 & Django REST Framework 3.16.1</p>
+            <p>Dataset: 8,807 Netflix titles | <a href="/admin/">Admin Panel</a></p>
+            <p>&copy; 2024 CM3035 Advanced Web Development Coursework</p>
+        </footer>
     </div>
-    <div class="stat-box">
-        <h3>6</h3>
-        <p>API Endpoints</p>
-    </div>
-    <div class="stat-box">
-        <h3>14</h3>
-        <p>Data Fields</p>
-    </div>
-    <div class="stat-box">
-        <h3>100%</h3>
-        <p>REST Compliant</p>
-    </div>
-</div>
-
-<h2 class="section-title">API Endpoints</h2>
-
-<!-- Endpoint 1: List Titles -->
-<div class="endpoint-card">
-    <h3>1. List Titles</h3>
-    <div>
-        <span class="method get">GET</span>
-        <code class="url">/api/titles/</code>
-    </div>
-    <p><strong>Description:</strong> Retrieve a list of all Netflix titles with optional filtering by type, rating, or release year.</p>
-    <p><strong>Query Parameters:</strong> <code>type</code>, <code>rating</code>, <code>year</code></p>
-    <p><strong>Example:</strong> <code>/api/titles/?type=Movie&year=2020</code></p>
-    <a href="/api/titles/" target="_blank">Try it →</a>
-    <a href="/api/titles/?type=Movie" target="_blank">Filter: Movies</a>
-    <a href="/api/titles/?rating=TV-MA" target="_blank">Filter: TV-MA</a>
-</div>
-
-<!-- Endpoint 2: Create Title -->
-<div class="endpoint-card">
-    <h3>2. Create New Title</h3>
-    <div>
-        <span class="method post">POST</span>
-        <code class="url">/api/titles/create/</code>
-    </div>
-    <p><strong>Description:</strong> Create a new Netflix title entry. Requires JSON body with title details.</p>
-    <p><strong>Required Fields:</strong> <code>show_id</code>, <code>type</code>, <code>title</code>, <code>release_year</code>, <code>duration</code>, <code>listed_in</code>, <code>description</code></p>
-    <p><strong>Response:</strong> 201 Created with new title data, or 400 Bad Request with validation errors</p>
-    <a href="/api/titles/create/" target="_blank">Try it →</a>
-</div>
-
-<!-- Endpoint 3: Statistics -->
-<div class="endpoint-card">
-    <h3>3. Statistics & Analytics</h3>
-    <div>
-        <span class="method get">GET</span>
-        <code class="url">/api/statistics/</code>
-    </div>
-    <p><strong>Description:</strong> Get comprehensive statistical analytics including type distribution, rating breakdown, content by year, top countries, and decade analysis.</p>
-    <p><strong>Features:</strong> Multiple aggregations using Count, Avg, Min, Max functions</p>
-    <p><strong>Returns:</strong> JSON object with detailed statistics and breakdowns</p>
-    <a href="/api/statistics/" target="_blank">View Statistics →</a>
-</div>
-
-<!-- Endpoint 4: Advanced Search -->
-<div class="endpoint-card">
-    <h3>4. Advanced Search (Most Complex)</h3>
-    <div>
-        <span class="method get">GET</span>
-        <code class="url">/api/titles/search/</code>
-    </div>
-    <p><strong>Description:</strong> Advanced multi-filter search using Django Q objects. Supports 9 different filter combinations.</p>
-    <p><strong>Query Parameters:</strong> <code>type</code>, <code>rating</code>, <code>country</code>, <code>year_min</code>, <code>year_max</code>, <code>genre</code>, <code>director</code>, <code>cast</code>, <code>title</code></p>
-    <p><strong>Example:</strong> <code>/api/titles/search/?genre=Drama&year_min=2015&country=United%20States</code></p>
-    <a href="/api/titles/search/" target="_blank">Try Search →</a>
-    <a href="/api/titles/search/?genre=Drama" target="_blank">Search: Drama</a>
-    <a href="/api/titles/search/?director=Nolan" target="_blank">Search: Nolan</a>
-</div>
-
-<!-- Endpoint 5: Country-Specific -->
-<div class="endpoint-card">
-    <h3>5. Country-Specific Content</h3>
-    <div>
-        <span class="method get">GET</span>
-        <code class="url">/api/country/&lt;country_name&gt;/</code>
-    </div>
-    <p><strong>Description:</strong> Get all titles from a specific country with statistics (total count, type breakdown, year range).</p>
-    <p><strong>URL Parameter:</strong> <code>country_name</code> - Name of the country</p>
-    <p><strong>Example:</strong> <code>/api/country/United%20States/</code></p>
-    <a href="/api/country/United States/" target="_blank">USA Content →</a>
-    <a href="/api/country/India/" target="_blank">India Content →</a>
-    <a href="/api/country/United Kingdom/" target="_blank">UK Content →</a>
-</div>
-
-<!-- Endpoint 6: Recommendations -->
-<div class="endpoint-card">
-    <h3>6. Personalized Recommendations</h3>
-    <div>
-        <span class="method get">GET</span>
-        <code class="url">/api/recommendations/</code>
-    </div>
-    <p><strong>Description:</strong> Get personalized content recommendations based on genre preference. Returns up to 20 titles.</p>
-    <p><strong>Query Parameters:</strong> <code>genre</code> (required), <code>type</code>, <code>recent</code></p>
-    <p><strong>Example:</strong> <code>/api/recommendations/?genre=Action&recent=true</code></p>
-    <a href="/api/recommendations/?genre=Action" target="_blank">Action Films →</a>
-    <a href="/api/recommendations/?genre=Drama" target="_blank">Drama →</a>
-    <a href="/api/recommendations/?genre=Comedy&type=Movie" target="_blank">Comedy Movies →</a>
-</div>
-
-<div class="intro" style="margin-top: 40px; background: #fff3cd; border-left-color: #ffc107;">
-    <h2 style="color: #856404;">📚 Documentation & Resources</h2>
-    <ul>
-        <li><strong>Django Admin Panel:</strong> <a href="/admin/" target="_blank">Manage data via admin interface</a></li>
-        <li><strong>Browsable API:</strong> All endpoints support Django REST Framework's browsable interface</li>
-        <li><strong>Data Format:</strong> All responses are in JSON format</li>
-        <li><strong>Authentication:</strong> Currently open (no authentication required for development)</li>
-        <li><strong>CORS:</strong> Configured for local development</li>
-    </ul>
-    
-    <h3 style="margin-top: 20px; color: #856404;">Quick Start with cURL:</h3>
-    <pre style="background: #f5f5f5; padding: 15px; border-radius: 4px; overflow-x: auto; margin-top: 10px;">
-# Get all titles
-curl http://127.0.0.1:8000/api/titles/
-
-# Get movies only
-curl "http://127.0.0.1:8000/api/titles/?type=Movie"
-
-# Get statistics
-curl http://127.0.0.1:8000/api/statistics/
-
-# Search for Drama from 2020
-curl "http://127.0.0.1:8000/api/titles/search/?genre=Drama&year_min=2020"
-
-# Get recommendations
-curl "http://127.0.0.1:8000/api/recommendations/?genre=Action"
-    </pre>
-</div>
-
-<div class="intro" style="margin-top: 20px; background: #d1ecf1; border-left-color: #17a2b8;">
-    <h2 style="color: #0c5460;">🎯 Project Information</h2>
-    <ul>
-        <li><strong>Course:</strong> CM3035 - Advanced Web Development</li>
-        <li><strong>Framework:</strong> Django 6.0 with Django REST Framework 3.16.1</li>
-        <li><strong>Database:</strong> SQLite3</li>
-        <li><strong>Dataset:</strong> Netflix Shows (8,807 titles from Kaggle)</li>
-        <li><strong>ORM Features:</strong> Q objects, aggregations, annotations, complex queries</li>
-        <li><strong>Total Endpoints:</strong> 6 (5 GET + 1 POST)</li>
-    </ul>
-</div>
-{% endblock %}
+</body>
+</html>
