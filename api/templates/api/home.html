@@ -3,6 +3,38 @@
 {% block title %}Home - Netflix API{% endblock %}
 
 {% block content %}
+<!-- System Information Box - Required per C7 -->
+<div class="intro" style="background: #e8f5e9; border-left-color: #4caf50;">
+    <h2 style="color: #2e7d32;">📋 System Information</h2>
+    <table style="width: 100%; border-collapse: collapse; margin-top: 15px;">
+        <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #c8e6c9;"><strong>Python Version:</strong></td>
+            <td style="padding: 8px; border-bottom: 1px solid #c8e6c9;">3.12.0</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #c8e6c9;"><strong>Django Version:</strong></td>
+            <td style="padding: 8px; border-bottom: 1px solid #c8e6c9;">6.0</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #c8e6c9;"><strong>Django REST Framework:</strong></td>
+            <td style="padding: 8px; border-bottom: 1px solid #c8e6c9;">3.16.1</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #c8e6c9;"><strong>Database:</strong></td>
+            <td style="padding: 8px; border-bottom: 1px solid #c8e6c9;">SQLite3</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px; border-bottom: 1px solid #c8e6c9;"><strong>Admin Username:</strong></td>
+            <td style="padding: 8px; border-bottom: 1px solid #c8e6c9;">admin</td>
+        </tr>
+        <tr>
+            <td style="padding: 8px;"><strong>Admin Password:</strong></td>
+            <td style="padding: 8px;">admin123</td>
+        </tr>
+    </table>
+    <p style="margin-top: 15px;"><strong>Packages:</strong> Django==6.0, djangorestframework==3.16.1, asgiref==3.11.0, sqlparse==0.5.4</p>
+</div>
+
 <div class="intro">
     <h2>Welcome to the Netflix Titles REST API</h2>
     <p>This API provides comprehensive access to a dataset of <strong>8,807 Netflix titles</strong> including movies and TV shows. Explore the endpoints below to query, analyze, and retrieve Netflix content data.</p>
@@ -128,11 +160,11 @@
 <div class="intro" style="margin-top: 40px; background: #fff3cd; border-left-color: #ffc107;">
     <h2 style="color: #856404;">📚 Documentation & Resources</h2>
     <ul>
-        <li><strong>Django Admin Panel:</strong> <a href="/admin/" target="_blank">Manage data via admin interface</a></li>
+        <li><strong>Django Admin Panel:</strong> <a href="/admin/" target="_blank">Manage data via admin interface</a> (Username: admin, Password: admin123)</li>
         <li><strong>Browsable API:</strong> All endpoints support Django REST Framework's browsable interface</li>
         <li><strong>Data Format:</strong> All responses are in JSON format</li>
-        <li><strong>Authentication:</strong> Currently open (no authentication required for development)</li>
-        <li><strong>CORS:</strong> Configured for local development</li>
+        <li><strong>Unit Tests:</strong> Run with <code>python manage.py test api</code></li>
+        <li><strong>Data Loading Script:</strong> <code>api/management/commands/load_netflix_data.py</code></li>
     </ul>
     
     <h3 style="margin-top: 20px; color: #856404;">Quick Start with cURL:</h3>

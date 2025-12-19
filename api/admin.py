@@ -1,13 +1,9 @@
 from django.contrib import admin
 from .models import NetflixTitle
 
-# Register your models here.
-
+# Admin panel configuration for managing Netflix titles
 @admin.register(NetflixTitle)
-class NetflixTitleAdmin(admin.ModelAdmin):
-    """
-    Admin configuration for NetflixTitle model.
-    """
+class NetflixTitleAdmin(admin.ModelAdmin):    
     list_display = ('show_id', 'title', 'type', 'release_year', 'rating', 'date_added')
     list_filter = ('type', 'rating', 'release_year')
     search_fields = ('title', 'director', 'cast', 'description')
@@ -15,20 +11,9 @@ class NetflixTitleAdmin(admin.ModelAdmin):
     readonly_fields = ('created_at', 'updated_at')
     
     fieldsets = (
-        ('Basic Information', {
-            'fields': ('show_id', 'type', 'title')
-        }),
-        ('Production Details', {
-            'fields': ('director', 'cast', 'country')
-        }),
-        ('Release Information', {
-            'fields': ('release_year', 'date_added', 'rating', 'duration')
-        }),
-        ('Content Details', {
-            'fields': ('listed_in', 'description')
-        }),
-        ('Metadata', {
-            'fields': ('created_at', 'updated_at'),
-            'classes': ('collapse',)
-        }),
+        ('Basic Information', {'fields': ('show_id', 'type', 'title')}),
+        ('Production Details', {'fields': ('director', 'cast', 'country')}),
+        ('Release Information', {'fields': ('release_year', 'date_added', 'rating', 'duration')}),
+        ('Content Details', {'fields': ('listed_in', 'description')}),
+        ('Metadata', {'fields': ('created_at', 'updated_at'), 'classes': ('collapse',)}),
     )
