@@ -1,1 +1,0 @@
-/api/statistics GET route not working

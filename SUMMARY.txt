@@ -1,0 +1,291 @@
+================================================================================
+CM3035 - ADVANCED WEB DEVELOPMENT COURSEWORK 1 SUMMARY
+================================================================================
+
+OVERVIEW:
+---------
+Build a RESTful web application using Django that stores data in a relational 
+database (SQLite3) and performs CRUD operations (Create, Read, Update, Delete) 
+on that data. Worth 50% of module grade.
+
+================================================================================
+WHAT YOU NEED TO DO:
+================================================================================
+
+1. CHOOSE A DATASET
+   - Maximum 10,000 entries total (across all CSV files)
+   - Can be medical, biological, financial, demographic, etc.
+   - Can have multiple CSV files
+   - Must justify the choice in your report
+   - Resources:
+     * https://datasetsearch.research.google.com/
+     * https://github.com/awesomedata/awesome-public-datasets
+     * https://data.nhm.ac.uk/search
+
+2. BUILD THE APPLICATION
+   - Use Django framework
+   - Use SQLite3 database (NOT PostgreSQL)
+   - Implement proper Django Models with migrations
+   - Use Django REST Framework
+   - Implement 6 interesting RESTful endpoints:
+     * At least ONE must use POST (to save new information)
+     * At least ONE must use serialization
+     * Endpoints should demonstrate complexity and Django knowledge
+     * Example: "return a list of all road accidents involving alcohol use 
+       during weekends"
+   
+3. DATA LOADING
+   - Create a Python script/method to load CSV data into database
+   - Script should perform necessary processing
+   - Must be able to seed the database from scratch
+
+4. UNIT TESTING
+   - Implement comprehensive unit tests for all endpoints
+   - Tests should ensure API correctness
+
+5. MAIN PAGE REQUIREMENTS
+   - Implement endpoints as hyperlinks on main page
+   - If using Swagger, access it via main page
+   - Display:
+     * Python version
+     * Django version
+     * Packages used
+     * Admin site username and password
+
+================================================================================
+DELIVERABLES:
+================================================================================
+
+D1. Django application implementing the REST API
+    - Source code organized properly
+
+D2. Django application instance with all data loaded
+    - Fully populated database
+
+D3. Data loading script and requirements.txt
+    - Python script to load CSV data
+    - pip requirements.txt file for all dependencies
+
+D4. Report (2000 words, PDF format)
+    Must include:
+    - Explanation of code and how it meets requirements R1-R4
+    - Dataset justification and why endpoints are interesting
+    - Logic and arrangement of code
+    - Setup instructions:
+      * List of packages and versions
+      * Development environment (OS, Python version)
+      * Django admin login credentials (username/password)
+      * How to run unit tests
+      * Location of data loading script
+
+D5. Video demonstration (max 8 minutes, MP4 format)
+    Must show and verbally explain:
+    - Unzipping the application
+    - Installing dependencies using requirements.txt
+    - Populating database using seeding script
+    - Running Python tests
+    - Demonstrating all RESTful endpoints
+    - Why you chose the dataset
+    - Why endpoints are interesting
+    - Database design explanation
+
+D6. BONUS - Deployment (optional)
+    - Deploy app using AWS, Digital Ocean, etc.
+    - Include app address and login details in report
+
+================================================================================
+REQUIREMENTS TO MEET:
+================================================================================
+
+R1: Basic Django functionality
+    a) Correct use of models and migrations
+    b) Correct use of forms, validators, and serialization
+    c) Correct use of Django REST Framework
+    d) Correct use of URL routing
+    e) Appropriate use of unit testing
+
+R2: Appropriate data model for the dataset
+    - Properly designed database schema
+    - Relationships between models if applicable
+
+R3: Appropriate code for required REST endpoints
+    - 6 well-implemented endpoints
+    - Demonstrate complexity
+    - At least one POST endpoint
+    - At least one using serialization
+
+R4: Appropriate bulk data loading method
+    - Efficient script to load CSV data
+    - Handles data processing correctly
+
+================================================================================
+CODE STYLE AND TECHNIQUE REQUIREMENTS:
+================================================================================
+
+C1: Code organization
+    - View code in views.py or api.py
+    - Models in models.py
+    - Proper file structure
+
+C2: Comments
+    - Appropriate comments for clarity and readability
+
+C3: Code layout
+    - Clear, consistent indenting
+    - Follow PEP8 style guide
+
+C4: Function organization
+    - Functions with clear, limited purpose
+    - Modular design
+
+C5: Naming conventions
+    - Meaningful names for functions, classes, variables
+    - Consistent naming style
+
+C6: Unit tests
+    - Comprehensive tests covering REST API functionality
+
+C7: Main page implementation
+    - Endpoints as hyperlinks
+    - Required information displayed
+    - Swagger (if used) accessible via main page
+
+================================================================================
+SUBMISSION FORMAT:
+================================================================================
+
+S1: Deliverables D1, D2, D3
+    - Compressed in standard .ZIP format
+
+S2: Deliverables D4 and D6
+    - In .PDF format
+
+S3: Deliverable D5
+    - In .mp4 format
+
+S4: Deliverable D5 alternative
+    - YouTube or similar link
+
+================================================================================
+TECH STACK TO USE:
+================================================================================
+
+CORE TECHNOLOGIES:
+------------------
+- Python 3.x (specify exact version in report)
+- Django (latest stable version recommended)
+- Django REST Framework
+- SQLite3 (default database - DO NOT use PostgreSQL)
+
+REQUIRED PYTHON PACKAGES:
+-------------------------
+- django
+- djangorestframework
+- (Additional packages as needed for your specific implementation)
+
+RECOMMENDED ADDITIONAL PACKAGES:
+-------------------------------
+- pytest or django.test for unit testing
+- coverage for test coverage
+- drf-yasg or drf-spectacular for Swagger documentation (optional)
+- pandas for CSV data processing (optional but helpful)
+
+DEVELOPMENT ENVIRONMENT:
+-----------------------
+- Any OS (Windows, macOS, Linux) - must document in report
+- Python virtual environment (venv or virtualenv)
+- Text editor/IDE (VS Code, PyCharm, etc.)
+
+OPTIONAL FOR BONUS:
+------------------
+- AWS/Digital Ocean/Heroku for deployment
+- Git for version control
+- Docker (if deploying)
+
+================================================================================
+MARKING CRITERIA BREAKDOWN:
+================================================================================
+
+CODE (50 points / 62.5%):
+-------------------------
+- Application runs as required (4 pts / 5%)
+- All REST endpoints implemented (6 pts / 7.5%)
+- Endpoints as links on main page (2 pts / 2.5%)
+- Database/Model design (3 pts / 3.75%)
+- Bulk data loading method (2 pts / 2.5%)
+- Overall entries below 10,000 (2 pts / 2.5%)
+- Django functionality (2 pts / 2.5%)
+- Unit testing (6 pts / 7.5%)
+- Clean code (3 pts / 3.75%)
+- Functional code (3 pts / 3.75%)
+- Modular and well-organized (4 pts / 5%)
+- Advanced techniques beyond course content (3 pts / 3.75%)
+
+REPORT (30 points / 37.5%):
+--------------------------
+- Clearly written (3 pts / 3.75%)
+- Dataset discussion (3 pts / 3.75%)
+- Endpoint discussion (4 pts / 5%)
+- Requirements explanation (3 pts / 3.75%)
+- Best practice application (4 pts / 5%)
+- Code explanation (3 pts / 3.75%)
+- Critical evaluation (4 pts / 5%)
+- Run information included (3 pts / 3.75%)
+
+MISC (10 points / 12.5%):
+------------------------
+- Video submission (5 pts / 6.25%)
+- BONUS: Deployment (8 pts / 10%)
+
+TOTAL: 80 points = 100%
+
+================================================================================
+KEY SUCCESS FACTORS:
+================================================================================
+
+1. Choose an interesting dataset that allows for complex queries
+2. Design meaningful, complex endpoints (not just basic CRUD)
+3. Follow Django best practices throughout
+4. Write comprehensive unit tests
+5. Document everything clearly in report
+6. Make a professional video demonstration
+7. Ensure code is clean, well-organized, and follows PEP8
+8. Create a user-friendly main page with all required information
+9. Test thoroughly before submission
+
+================================================================================
+QUESTIONS TO CONSIDER:
+================================================================================
+
+Before starting, think about:
+
+1. What dataset will allow me to create interesting, complex queries?
+2. What 6 endpoints will best demonstrate my Django knowledge?
+3. How should I structure my models to properly represent the data?
+4. What validations are needed for data integrity?
+5. How will I organize my code to be clean and maintainable?
+6. What edge cases should my unit tests cover?
+7. How will I make my endpoints interesting and non-trivial?
+8. What makes my chosen dataset worth analyzing?
+
+================================================================================
+NEXT STEPS:
+================================================================================
+
+1. Find and download a suitable dataset (max 10,000 entries)
+2. Analyze the data structure and plan your models
+3. Sketch out 6 interesting endpoints
+4. Set up Django project with virtual environment
+5. Implement models and migrations
+6. Create data loading script
+7. Build REST endpoints
+8. Write unit tests
+9. Create main page with links
+10. Write report (2000 words)
+11. Record video demonstration (8 min max)
+12. Test everything thoroughly
+13. Package and submit
+
+================================================================================
+END OF SUMMARY
+================================================================================

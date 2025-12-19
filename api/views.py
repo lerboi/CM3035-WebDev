@@ -172,9 +172,8 @@ def statistics(request):
     top_countries_data = [{'country': c[0], 'count': c[1]} for c in top_countries]
     
     # Decade analysis
-    decade_data = NetflixTitle.objects.annotate(
-        decade=ExtractYear('release_year')
-    ).values('release_year').annotate(
+    # Note: release_year is already an IntegerField, so we don't need ExtractYear
+    decade_data = NetflixTitle.objects.values('release_year').annotate(
         count=Count('show_id')
     )
     
