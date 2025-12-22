@@ -1,7 +1,7 @@
 from django.contrib import admin
 from .models import NetflixTitle
 
-# Admin panel configuration for managing Netflix titles
+
 @admin.register(NetflixTitle)
 class NetflixTitleAdmin(admin.ModelAdmin):    
     list_display = ('show_id', 'title', 'type', 'release_year', 'rating', 'date_added')
@@ -9,6 +9,7 @@ class NetflixTitleAdmin(admin.ModelAdmin):
     search_fields = ('title', 'director', 'cast', 'description')
     ordering = ('-date_added', '-release_year')
     readonly_fields = ('created_at', 'updated_at')
+    list_per_page = 50
     
     fieldsets = (
         ('Basic Information', {'fields': ('show_id', 'type', 'title')}),

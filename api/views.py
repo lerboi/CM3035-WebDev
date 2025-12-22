@@ -3,17 +3,16 @@ from rest_framework.response import Response
 from rest_framework import status
 from django.db.models import Count, Avg, Min, Max, Q
 from django.shortcuts import render
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from datetime import datetime
 from .models import NetflixTitle
 from .serializers import NetflixTitleSerializer
 
 
-# Renders the main landing page with API documentation
 def home(request):
     return render(request, 'api/home.html')
 
-
-# Returns all titles, optionally filtered by type, rating, or year
+# Returns paginated titles with optional type, rating, year filters
 @api_view(['GET'])
 def title_list(request):
     queryset = NetflixTitle.objects.all()
@@ -24,19 +23,44 @@ def title_list(request):
     
     if content_type:
         queryset = queryset.filter(type=content_type)
-    
     if rating:
         queryset = queryset.filter(rating=rating)
-    
     if year:
         try:
             queryset = queryset.filter(release_year=int(year))
         except ValueError:
             return Response({'error': 'Year must be a valid integer'}, status=status.HTTP_400_BAD_REQUEST)
     
-    serializer = NetflixTitleSerializer(queryset, many=True)
-    return Response(serializer.data)
-
+    page = request.GET.get('page', 1)
+    page_size = request.GET.get('page_size', 20)
+    
+    try:
+        page_size = int(page_size)
+        if page_size < 1 or page_size > 100:
+            page_size = 20
+    except ValueError:
+        page_size = 20
+    
+    paginator = Paginator(queryset, page_size)
+    
+    try:
+        titles = paginator.page(page)
+    except PageNotAnInteger:
+        titles = paginator.page(1)
+    except EmptyPage:
+        titles = paginator.page(paginator.num_pages)
+    
+    serializer = NetflixTitleSerializer(titles, many=True)
+    
+    return Response({
+        'count': paginator.count,
+        'total_pages': paginator.num_pages,
+        'current_page': titles.number,
+        'page_size': page_size,
+        'has_next': titles.has_next(),
+        'has_previous': titles.has_previous(),
+        'results': serializer.data
+    })
 
 # Creates a new Netflix title from JSON data
 @api_view(['POST'])
@@ -46,31 +70,23 @@ def title_create(request):
     if serializer.is_valid():
         serializer.save()
         return Response(serializer.data, status=status.HTTP_201_CREATED)
-    
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
-
-# Returns statistics about the Netflix catalog (counts, averages, top countries)
+# Returns catalog statistics including counts, distributions, and averages
 @api_view(['GET'])
 def statistics(request):
     total_count = NetflixTitle.objects.count()
-    
     type_distribution = NetflixTitle.objects.values('type').annotate(count=Count('show_id')).order_by('-count')
-    
     rating_breakdown = NetflixTitle.objects.values('rating').annotate(count=Count('show_id')).order_by('-count')
-    
     content_by_year = NetflixTitle.objects.values('release_year').annotate(count=Count('show_id')).order_by('-release_year')
     
-    # Count titles per country
     country_titles = NetflixTitle.objects.exclude(country__isnull=True).exclude(country='')
     country_counts = {}
     for title in country_titles:
         for country in [c.strip() for c in title.country.split(',')]:
             country_counts[country] = country_counts.get(country, 0) + 1
-    
     top_countries = [{'country': c, 'count': n} for c, n in sorted(country_counts.items(), key=lambda x: x[1], reverse=True)[:10]]
     
-    # Group by decade
     decade_data = NetflixTitle.objects.values('release_year').annotate(count=Count('show_id'))
     decade_counts = {}
     for item in decade_data:
@@ -90,8 +106,7 @@ def statistics(request):
         'average_stats': avg_stats
     })
 
-
-# Advanced search with multiple optional filters (type, rating, country, year range, genre, director, cast, title)
+# Advanced search with multiple optional filters using Q objects
 @api_view(['GET'])
 def title_search(request):
     queryset = NetflixTitle.objects.all()
@@ -141,9 +156,7 @@ def title_search(request):
     
     queryset = queryset.filter(filters)
     serializer = NetflixTitleSerializer(queryset, many=True)
-    
     return Response({'count': queryset.count(), 'results': serializer.data})
-
 
 # Returns all titles from a specific country with statistics
 @api_view(['GET'])
@@ -156,7 +169,6 @@ def country_titles(request, country_name):
     total_count = queryset.count()
     type_breakdown = queryset.values('type').annotate(count=Count('show_id'))
     avg_year = queryset.aggregate(avg_year=Avg('release_year'))
-    
     serializer = NetflixTitleSerializer(queryset, many=True)
     
     return Response({
@@ -168,7 +180,6 @@ def country_titles(request, country_name):
         },
         'titles': serializer.data
     })
-
 
 # Returns up to 20 recommended titles based on genre, type, and recency
 @api_view(['GET'])
@@ -194,7 +205,6 @@ def recommendations(request):
         return Response({'message': 'No recommendations found for the given criteria'}, status=status.HTTP_200_OK)
     
     serializer = NetflixTitleSerializer(queryset, many=True)
-    
     return Response({
         'genre': genre,
         'count': len(serializer.data),

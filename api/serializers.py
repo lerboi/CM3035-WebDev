@@ -1,7 +1,7 @@
 from rest_framework import serializers
 from .models import NetflixTitle
 
-# Converts NetflixTitle objects to/from JSON.
+# Converts NetflixTitle objects to/from JSON
 class NetflixTitleSerializer(serializers.ModelSerializer):    
     class Meta:
         model = NetflixTitle
