@@ -1,13 +1,3 @@
-"""
-Management command to load Netflix data from CSV file.
-
-This command reads the netflix_titles.csv file and loads all entries
-into the NetflixTitle model.
-
-Usage:
-    python manage.py load_netflix_data
-"""
-
 import csv
 from datetime import datetime
 from django.core.management.base import BaseCommand
