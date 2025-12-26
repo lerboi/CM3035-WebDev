@@ -8,20 +8,17 @@
     <link rel="stylesheet" href="{% static 'api/css/style.css' %}">
 </head>
 <body>
-    <div class="container">
-        <header>
-            <h1>Netflix Titles REST API</h1>
-            <p>CM3035 Advanced Web Development Coursework</p>
-        </header>
+    <header>
+        <h1>Netflix Titles REST API</h1>
+        <p>CM3035 Advanced Web Development</p>
+    </header>
 
-        <div class="content">
-            {% block content %}{% endblock %}
-        </div>
+    <main>
+        {% block content %}{% endblock %}
+    </main>
 
-        <footer>
-            <p><strong>Netflix Titles API</strong> | Django 6.0 & Django REST Framework 3.16.1</p>
-            <p>Dataset: 8,807 Netflix titles | <a href="/admin/">Admin Panel</a></p>
-        </footer>
-    </div>
+    <footer>
+        <a href="/admin/">Admin Panel</a>
+    </footer>
 </body>
 </html>

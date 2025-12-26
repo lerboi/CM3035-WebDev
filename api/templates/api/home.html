@@ -3,156 +3,73 @@
 {% block title %}Home - Netflix API{% endblock %}
 
 {% block content %}
-<!-- System Information -->
-<div class="info-box">
-    <h2>System Information</h2>
-    <table class="info-table">
-        <tr>
-            <td>Python Version</td>
-            <td>3.12.0</td>
-        </tr>
-        <tr>
-            <td>Django Version</td>
-            <td>6.0</td>
-        </tr>
-        <tr>
-            <td>REST Framework</td>
-            <td>3.16.1</td>
-        </tr>
-        <tr>
-            <td>Database</td>
-            <td>SQLite3</td>
-        </tr>
-        <tr>
-            <td>Admin Username</td>
-            <td>admin</td>
-        </tr>
-        <tr>
-            <td>Admin Password</td>
-            <td>admin123</td>
-        </tr>
-    </table>
-    <p><strong>Packages:</strong> Django==6.0, djangorestframework==3.16.1, asgiref==3.11.0, sqlparse==0.5.4</p>
-</div>
+<div class="page-container">
+    
+    <section class="info-section">
+        <h2>System Information</h2>
+        <table class="info-table">
+            <tr><td>Python Version</td><td>3.12.0</td></tr>
+            <tr><td>Django Version</td><td>6.0</td></tr>
+            <tr><td>REST Framework</td><td>3.16.1</td></tr>
+        </table>
+        
+        <h3>Packages</h3>
+        <ul class="package-list">
+            <li>Django==6.0</li>
+            <li>djangorestframework==3.16.1</li>
+            <li>asgiref==3.11.0</li>
+            <li>sqlparse==0.5.4</li>
+        </ul>
 
-<!-- Welcome -->
-<div class="info-box welcome">
-    <h2>Welcome to the Netflix Titles REST API</h2>
-    <p>This API provides access to <strong>8,807 Netflix titles</strong> including movies and TV shows.</p>
-    <ul>
-        <li>6 REST API Endpoints</li>
-        <li>Pagination Support</li>
-        <li>Advanced Search with Q objects</li>
-        <li>Statistical Analytics</li>
-        <li>Personalized Recommendations</li>
-        <li>Country-Specific Content</li>
-    </ul>
-</div>
+        <h3>Admin Login</h3>
+        <p><strong>Username:</strong> admin</p>
+        <p><strong>Password:</strong> admin123</p>
+    </section>
 
-<!-- Stats -->
-<div class="stats-grid">
-    <div class="stat-box">
-        <h3>8,807</h3>
-        <p>Total Titles</p>
-    </div>
-    <div class="stat-box">
-        <h3>6</h3>
-        <p>API Endpoints</p>
-    </div>
-    <div class="stat-box">
-        <h3>14</h3>
-        <p>Data Fields</p>
-    </div>
-    <div class="stat-box">
-        <h3>32</h3>
-        <p>Unit Tests</p>
-    </div>
-</div>
+    <section class="endpoints-section">
+        <h2>API Endpoints</h2>
+        <table class="endpoints-table">
+            <thead>
+                <tr>
+                    <th>Method</th>
+                    <th>Endpoint</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><span class="get">GET</span></td>
+                    <td><a href="/api/titles/">/api/titles/</a></td>
+                    <td>Paginated list of titles with optional filters (type, rating, year, page, page_size)</td>
+                </tr>
+                <tr>
+                    <td><span class="post">POST</span></td>
+                    <td><a href="/api/titles/create/">/api/titles/create/</a></td>
+                    <td>Create a new title entry</td>
+                </tr>
+                <tr>
+                    <td><span class="get">GET</span></td>
+                    <td><a href="/api/statistics/">/api/statistics/</a></td>
+                    <td>Aggregated statistics for the dataset</td>
+                </tr>
+                <tr>
+                    <td><span class="get">GET</span></td>
+                    <td><a href="/api/titles/search/">/api/titles/search/</a></td>
+                    <td>Advanced search with multiple filters (type, rating, country, year_min, year_max, genre, director, cast, title)</td>
+                </tr>
+                <tr>
+                    <td><span class="get">GET</span></td>
+                    <td><a href="/api/country/United States/">/api/country/&lt;country_name&gt;/</a></td>
+                    <td>All titles from a specific country with statistics</td>
+                </tr>
+                <tr>
+                    <td><span class="get">GET</span></td>
+                    <td><a href="/api/recommendations/?genre=Action">/api/recommendations/</a></td>
+                    <td>Genre-based recommendations (requires genre parameter)</td>
+                </tr>
+            </tbody>
+        </table>
+    </section>
 
-<!-- Endpoints -->
-<h2 class="section-title">API Endpoints</h2>
-
-<!-- Endpoint 1 -->
-<div class="endpoint-card">
-    <h3>1. List Titles (Paginated)</h3>
-    <span class="method get">GET</span>
-    <code class="url">/api/titles/</code>
-    <p>Retrieve paginated Netflix titles with optional filtering by type, rating, or year.</p>
-    <p><strong>Parameters:</strong> type, rating, year, page, page_size (default: 20, max: 100)</p>
-    <p><strong>Example:</strong> <code>/api/titles/?page=1&page_size=10&type=Movie</code></p>
-    <a href="/api/titles/" class="btn">Page 1</a>
-    <a href="/api/titles/?page=2" class="btn">Page 2</a>
-    <a href="/api/titles/?type=Movie&page_size=10" class="btn">Movies (10/page)</a>
-</div>
-
-<!-- Endpoint 2 -->
-<div class="endpoint-card">
-    <h3>2. Create Title</h3>
-    <span class="method post">POST</span>
-    <code class="url">/api/titles/create/</code>
-    <p>Create a new Netflix title entry with JSON body.</p>
-    <p><strong>Required:</strong> show_id, type, title, release_year, duration, listed_in, description</p>
-    <a href="/api/titles/create/" class="btn">Try it</a>
-</div>
-
-<!-- Endpoint 3 -->
-<div class="endpoint-card">
-    <h3>3. Statistics</h3>
-    <span class="method get">GET</span>
-    <code class="url">/api/statistics/</code>
-    <p>Get comprehensive statistics: type distribution, ratings, top countries, decade analysis.</p>
-    <a href="/api/statistics/" class="btn">View Statistics</a>
-</div>
-
-<!-- Endpoint 4 -->
-<div class="endpoint-card">
-    <h3>4. Advanced Search</h3>
-    <span class="method get">GET</span>
-    <code class="url">/api/titles/search/</code>
-    <p>Multi-filter search using Django Q objects. Supports 9 filter combinations.</p>
-    <p><strong>Parameters:</strong> type, rating, country, year_min, year_max, genre, director, cast, title</p>
-    <a href="/api/titles/search/" class="btn">Search</a>
-    <a href="/api/titles/search/?genre=Drama" class="btn">Drama</a>
-    <a href="/api/titles/search/?country=India" class="btn">India</a>
-</div>
-
-<!-- Endpoint 5 -->
-<div class="endpoint-card">
-    <h3>5. Country Content</h3>
-    <span class="method get">GET</span>
-    <code class="url">/api/country/&lt;country_name&gt;/</code>
-    <p>Get all titles from a specific country with statistics.</p>
-    <a href="/api/country/United States/" class="btn">USA</a>
-    <a href="/api/country/India/" class="btn">India</a>
-    <a href="/api/country/United Kingdom/" class="btn">UK</a>
-</div>
-
-<!-- Endpoint 6 -->
-<div class="endpoint-card">
-    <h3>6. Recommendations</h3>
-    <span class="method get">GET</span>
-    <code class="url">/api/recommendations/</code>
-    <p>Get personalized recommendations based on genre. Returns up to 20 titles.</p>
-    <p><strong>Parameters:</strong> genre (required), type, recent</p>
-    <a href="/api/recommendations/?genre=Action" class="btn">Action</a>
-    <a href="/api/recommendations/?genre=Drama" class="btn">Drama</a>
-    <a href="/api/recommendations/?genre=Comedy" class="btn">Comedy</a>
-</div>
-
-<!-- Documentation -->
-<div class="info-box docs">
-    <h2>Quick Start</h2>
-    <ul>
-        <li><strong>Admin Panel:</strong> <a href="/admin/">/admin/</a> (admin / admin123)</li>
-        <li><strong>Run Tests:</strong> <code>python manage.py test api</code></li>
-        <li><strong>Load Data:</strong> <code>python manage.py load_netflix_data</code></li>
-    </ul>
-    <pre>
-# Example cURL commands
-curl http://3.26.225.198/api/titles/?page=1&page_size=10
-curl http://3.26.225.198/api/statistics/
-curl "http://3.26.225.198/api/titles/search/?genre=Drama"
-curl "http://3.26.225.198/api/recommendations/?genre=Action"
-    </pre>
 </div>
 {% endblock %}
