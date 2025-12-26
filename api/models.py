@@ -1,7 +1,7 @@
 from django.db import models
 from django.core.validators import MinValueValidator, MaxValueValidator, MinLengthValidator
 
-# Stores Netflix movie and TV show data.
+# Stores Netflix movie and TV show data
 class NetflixTitle(models.Model):    
     TYPE_CHOICES = [
         ('Movie', 'Movie'),
