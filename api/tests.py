@@ -27,49 +27,59 @@ class NetflixTitleModelTest(TestCase):
     # returns correct format for movie
     def test_model_str_representation(self):
         self.assertEqual(str(self.movie), 'Test Movie (2020) - Movie')
+        print("PASSED: test_model_str_representation")
 
     # returns correct format for tv show
     def test_model_str_representation_tv_show(self):
         self.assertEqual(str(self.tv_show), 'Test TV Show (2019) - TV Show')
+        print("PASSED: test_model_str_representation_tv_show")
 
     # splits comma-separated genres
     def test_get_genres_method(self):
         genres = self.movie.get_genres()
         self.assertEqual(len(genres), 3)
         self.assertIn('Action', genres)
+        print("PASSED: test_get_genres_method")
 
     # splits comma-separated cast
     def test_get_cast_list_method(self):
         cast = self.movie.get_cast_list()
         self.assertEqual(len(cast), 3)
         self.assertIn('Actor One', cast)
+        print("PASSED: test_get_cast_list_method")
 
     # returns empty list when cast is none
     def test_get_cast_list_empty(self):
         self.movie.cast = None
         self.movie.save()
         self.assertEqual(self.movie.get_cast_list(), [])
+        print("PASSED: test_get_cast_list_empty")
 
     # extracts minutes from movie duration
     def test_get_duration_minutes_movie(self):
         self.assertEqual(self.movie.get_duration_minutes(), 120)
+        print("PASSED: test_get_duration_minutes_movie")
 
     # returns none for tv shows
     def test_get_duration_minutes_tv_show(self):
         self.assertIsNone(self.tv_show.get_duration_minutes())
+        print("PASSED: test_get_duration_minutes_tv_show")
 
     # extracts seasons from tv show
     def test_get_duration_seasons_tv_show(self):
         self.assertEqual(self.tv_show.get_duration_seasons(), 3)
+        print("PASSED: test_get_duration_seasons_tv_show")
 
     # returns none for movies
     def test_get_duration_seasons_movie(self):
         self.assertIsNone(self.movie.get_duration_seasons())
+        print("PASSED: test_get_duration_seasons_movie")
 
     # orders by date_added descending
     def test_model_ordering(self):
         titles = NetflixTitle.objects.all()
         self.assertEqual(titles[0].show_id, 's1')
+        print("PASSED: test_model_ordering")
 
 
 class NetflixTitleSerializerTest(TestCase):
@@ -80,6 +90,7 @@ class NetflixTitleSerializerTest(TestCase):
                 'description': 'A valid description.'}
         serializer = NetflixTitleSerializer(data=data)
         self.assertTrue(serializer.is_valid())
+        print("PASSED: test_serializer_valid_data")
 
     # rejects invalid type
     def test_serializer_invalid_type(self):
@@ -89,6 +100,7 @@ class NetflixTitleSerializerTest(TestCase):
         serializer = NetflixTitleSerializer(data=data)
         self.assertFalse(serializer.is_valid())
         self.assertIn('type', serializer.errors)
+        print("PASSED: test_serializer_invalid_type")
 
     # rejects year below 1900
     def test_serializer_invalid_year_low(self):
@@ -97,6 +109,7 @@ class NetflixTitleSerializerTest(TestCase):
                 'description': 'Too old.'}
         serializer = NetflixTitleSerializer(data=data)
         self.assertFalse(serializer.is_valid())
+        print("PASSED: test_serializer_invalid_year_low")
 
     # rejects year above 2030
     def test_serializer_invalid_year_high(self):
@@ -105,6 +118,7 @@ class NetflixTitleSerializerTest(TestCase):
                 'description': 'Too far.'}
         serializer = NetflixTitleSerializer(data=data)
         self.assertFalse(serializer.is_valid())
+        print("PASSED: test_serializer_invalid_year_high")
 
     # ignores read-only timestamp fields
     def test_serializer_read_only_fields(self):
@@ -113,12 +127,14 @@ class NetflixTitleSerializerTest(TestCase):
                 'description': 'Test.', 'created_at': '2020-01-01T00:00:00Z'}
         serializer = NetflixTitleSerializer(data=data)
         self.assertTrue(serializer.is_valid())
+        print("PASSED: test_serializer_read_only_fields")
 
     # rejects missing required fields
     def test_serializer_missing_required_field(self):
         data = {'show_id': 's105', 'type': 'Movie'}
         serializer = NetflixTitleSerializer(data=data)
         self.assertFalse(serializer.is_valid())
+        print("PASSED: test_serializer_missing_required_field")
 
 
 class TitleListEndpointTest(APITestCase):
@@ -138,18 +154,21 @@ class TitleListEndpointTest(APITestCase):
         self.assertIn('total_pages', response.data)
         self.assertIn('current_page', response.data)
         self.assertIn('results', response.data)
+        print("PASSED: test_list_titles_paginated")
 
     # returns 20 items by default
     def test_list_titles_default_page_size(self):
         response = self.client.get(reverse('api:title-list'))
         self.assertEqual(len(response.data['results']), 20)
         self.assertEqual(response.data['count'], 25)
+        print("PASSED: test_list_titles_default_page_size")
 
     # respects custom page size
     def test_list_titles_custom_page_size(self):
         response = self.client.get(reverse('api:title-list'), {'page_size': 10})
         self.assertEqual(len(response.data['results']), 10)
         self.assertEqual(response.data['total_pages'], 3)
+        print("PASSED: test_list_titles_custom_page_size")
 
     # navigates between pages correctly
     def test_list_titles_page_navigation(self):
@@ -157,21 +176,25 @@ class TitleListEndpointTest(APITestCase):
         self.assertEqual(response.data['current_page'], 2)
         self.assertTrue(response.data['has_previous'])
         self.assertTrue(response.data['has_next'])
+        print("PASSED: test_list_titles_page_navigation")
 
     # filters by type movie
     def test_filter_by_type_movie(self):
         response = self.client.get(reverse('api:title-list'), {'type': 'Movie'})
         self.assertEqual(response.data['count'], 13)
+        print("PASSED: test_filter_by_type_movie")
 
     # filters by type tv show
     def test_filter_by_type_tv_show(self):
         response = self.client.get(reverse('api:title-list'), {'type': 'TV Show'})
         self.assertEqual(response.data['count'], 12)
+        print("PASSED: test_filter_by_type_tv_show")
 
     # returns error for invalid year
     def test_filter_invalid_year(self):
         response = self.client.get(reverse('api:title-list'), {'year': 'invalid'})
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        print("PASSED: test_filter_invalid_year")
 
 
 class TitleCreateEndpointTest(APITestCase):
@@ -182,6 +205,7 @@ class TitleCreateEndpointTest(APITestCase):
                 'description': 'A new comedy movie.'}
         response = self.client.post(reverse('api:title-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        print("PASSED: test_create_title_success")
 
     # rejects invalid type
     def test_create_title_invalid_data(self):
@@ -190,6 +214,7 @@ class TitleCreateEndpointTest(APITestCase):
                 'description': 'Description.'}
         response = self.client.post(reverse('api:title-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        print("PASSED: test_create_title_invalid_data")
 
     # rejects duplicate show_id
     def test_create_title_duplicate_show_id(self):
@@ -200,12 +225,14 @@ class TitleCreateEndpointTest(APITestCase):
                 'description': 'Description.'}
         response = self.client.post(reverse('api:title-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        print("PASSED: test_create_title_duplicate_show_id")
 
     # rejects missing required fields
     def test_create_title_missing_required_fields(self):
         data = {'show_id': 's997', 'type': 'Movie'}
         response = self.client.post(reverse('api:title-create'), data, format='json')
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        print("PASSED: test_create_title_missing_required_fields")
 
 
 class StatisticsEndpointTest(APITestCase):
@@ -226,17 +253,20 @@ class StatisticsEndpointTest(APITestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertIn('total_count', response.data)
         self.assertIn('type_distribution', response.data)
+        print("PASSED: test_statistics_returns_data")
 
     # returns correct total count
     def test_statistics_total_count(self):
         response = self.client.get(reverse('api:statistics'))
         self.assertEqual(response.data['total_count'], 3)
+        print("PASSED: test_statistics_total_count")
 
     # returns correct type distribution
     def test_statistics_type_distribution(self):
         response = self.client.get(reverse('api:statistics'))
         type_dist = {item['type']: item['count'] for item in response.data['type_distribution']}
         self.assertEqual(type_dist['Movie'], 2)
+        print("PASSED: test_statistics_type_distribution")
 
 
 class TitleSearchEndpointTest(APITestCase):
@@ -258,32 +288,38 @@ class TitleSearchEndpointTest(APITestCase):
     def test_search_by_genre(self):
         response = self.client.get(reverse('api:title-search'), {'genre': 'Action'})
         self.assertEqual(response.data['count'], 1)
+        print("PASSED: test_search_by_genre")
 
     # searches by director
     def test_search_by_director(self):
         response = self.client.get(reverse('api:title-search'), {'director': 'John'})
         self.assertEqual(response.data['count'], 2)
+        print("PASSED: test_search_by_director")
 
     # searches by year range
     def test_search_by_year_range(self):
         response = self.client.get(reverse('api:title-search'), {'year_min': '2019', 'year_max': '2020'})
         self.assertEqual(response.data['count'], 1)
+        print("PASSED: test_search_by_year_range")
 
     # searches by country
     def test_search_by_country(self):
         response = self.client.get(reverse('api:title-search'), {'country': 'United States'})
         self.assertEqual(response.data['count'], 2)
+        print("PASSED: test_search_by_country")
 
     # combines multiple filters
     def test_search_multiple_filters(self):
         response = self.client.get(reverse('api:title-search'), 
             {'type': 'Movie', 'country': 'United States', 'year_min': '2020'})
         self.assertEqual(response.data['count'], 2)
+        print("PASSED: test_search_multiple_filters")
 
     # returns zero for no matches
     def test_search_no_results(self):
         response = self.client.get(reverse('api:title-search'), {'genre': 'NonexistentGenre'})
         self.assertEqual(response.data['count'], 0)
+        print("PASSED: test_search_no_results")
 
 
 class CountryTitlesEndpointTest(APITestCase):
@@ -303,16 +339,19 @@ class CountryTitlesEndpointTest(APITestCase):
         response = self.client.get(reverse('api:country-titles', kwargs={'country_name': 'United States'}))
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
+        print("PASSED: test_country_titles_success")
 
     # includes statistics in response
     def test_country_titles_statistics(self):
         response = self.client.get(reverse('api:country-titles', kwargs={'country_name': 'United States'}))
         self.assertIn('statistics', response.data)
+        print("PASSED: test_country_titles_statistics")
 
     # returns 404 for non-existent country
     def test_country_titles_not_found(self):
         response = self.client.get(reverse('api:country-titles', kwargs={'country_name': 'Nonexistent'}))
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        print("PASSED: test_country_titles_not_found")
 
 
 class RecommendationsEndpointTest(APITestCase):
@@ -331,22 +370,26 @@ class RecommendationsEndpointTest(APITestCase):
     def test_recommendations_requires_genre(self):
         response = self.client.get(reverse('api:recommendations'))
         self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        print("PASSED: test_recommendations_requires_genre")
 
     # returns recommendations for genre
     def test_recommendations_with_genre(self):
         response = self.client.get(reverse('api:recommendations'), {'genre': 'Action'})
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.data['count'], 2)
+        print("PASSED: test_recommendations_with_genre")
 
     # filters by type
     def test_recommendations_with_type_filter(self):
         response = self.client.get(reverse('api:recommendations'), {'genre': 'Action', 'type': 'Movie'})
         self.assertEqual(response.data['count'], 2)
+        print("PASSED: test_recommendations_with_type_filter")
 
     # returns message for no matches
     def test_recommendations_no_matches(self):
         response = self.client.get(reverse('api:recommendations'), {'genre': 'SciFi'})
         self.assertIn('message', response.data)
+        print("PASSED: test_recommendations_no_matches")
 
 
 class HomePageTest(APITestCase):
@@ -354,6 +397,7 @@ class HomePageTest(APITestCase):
     def test_home_page_loads(self):
         response = self.client.get('/')
         self.assertEqual(response.status_code, status.HTTP_200_OK)
+        print("PASSED: test_home_page_loads")
 
     # contains required system info
     def test_home_page_contains_required_info(self):
@@ -361,3 +405,4 @@ class HomePageTest(APITestCase):
         content = response.content.decode('utf-8')
         self.assertIn('Python', content)
         self.assertIn('Django', content)
+        print("PASSED: test_home_page_contains_required_info")
